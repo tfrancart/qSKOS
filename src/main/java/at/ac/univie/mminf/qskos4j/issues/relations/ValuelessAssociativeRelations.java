@@ -1,6 +1,7 @@
 package at.ac.univie.mminf.qskos4j.issues.relations;
 
 import at.ac.univie.mminf.qskos4j.issues.Issue;
+import at.ac.univie.mminf.qskos4j.issues.IssueFix;
 import at.ac.univie.mminf.qskos4j.result.CollectionResult;
 import at.ac.univie.mminf.qskos4j.util.IssueDescriptor;
 import at.ac.univie.mminf.qskos4j.util.Tuple;
@@ -36,8 +37,15 @@ public class ValuelessAssociativeRelations extends Issue<CollectionResult<Tuple<
 
         return new CollectionResult<>(redundantAssociativeRelations);
     }
+    
+    
 
-    private String createRedundantAssociativeRelationsQuery() {
+    @Override
+    public IssueFix<CollectionResult<Tuple<IRI>>> getFix() throws RDF4JException {
+		return new ValuelessAssociativeRelationsFix(this, this.repCon);
+	}
+
+	private String createRedundantAssociativeRelationsQuery() {
         return SparqlPrefix.SKOS +
                 "SELECT ?parent ?child ?otherchild "+
                 "WHERE {" +
@@ -55,7 +63,7 @@ public class ValuelessAssociativeRelations extends Issue<CollectionResult<Tuple<
                 "}";
     }
 
-    private void generateResultsList(Collection<Tuple<IRI>> allResults, TupleQueryResult result)
+	private void generateResultsList(Collection<Tuple<IRI>> allResults, TupleQueryResult result)
             throws QueryEvaluationException
     {
         while (result.hasNext()) {

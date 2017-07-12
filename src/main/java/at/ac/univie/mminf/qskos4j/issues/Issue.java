@@ -26,6 +26,15 @@ public abstract class Issue<T extends Result<?>> {
         }
         return result;
     }
+    
+    /**
+     * Get the fix for this issue, if any.
+     * @return A fix for the issue, or null if a fix is not available.
+     * @throws RDF4JException
+     */
+    public IssueFix<T> getFix() throws RDF4JException {
+    	return null;
+    }
 
     protected final void reset() {
         result = null;
